@@ -28,23 +28,13 @@ public class BookController {
 	@Autowired
 	BookServiceImp bookServiceImp;
 	
-	@Autowired
-	AuthorServiceImp authorServiceImp;
+	
  
 	@GetMapping("/book")
 	public ResponseEntity<?> getAllBook(){
 		return bookServiceImp.getAllBook();
 	}
 	
-	@GetMapping("/author")
-	public ResponseEntity<?> getAllAuthor(){
-		return authorServiceImp.getAllAuthor();
-	}
-	
-	@PostMapping("/author")
-	public ResponseEntity<?> createAuthor(@RequestBody Author newAuthor){
-		return authorServiceImp.createAuthor(newAuthor);
-	}
 	
 	@PostMapping("/book/{authorId}")
 	public ResponseEntity<?> createBook(@PathVariable Long authorId, @RequestBody Book newBook){

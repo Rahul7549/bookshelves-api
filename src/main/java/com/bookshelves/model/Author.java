@@ -98,11 +98,10 @@ public class Author {
 
 
 	public Author( Long authorid,String authorname,String authoraddress) {
-		this.authorid = authorid;
+//		this.authorid = authorid;
 		this.authorname = authorname;
 		this.authoraddress = authoraddress;
-		System.out.println("authorid "+authorid);
-		System.out.println("this.authorid "+this.authorid);
+		
 	}
 
 
