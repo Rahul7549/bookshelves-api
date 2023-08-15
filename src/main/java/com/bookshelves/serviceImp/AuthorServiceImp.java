@@ -31,13 +31,35 @@ public class AuthorServiceImp {
 	
 	
 	public ResponseEntity<?> createAuthor(Author newAuthor){
-		
-		
-		
-//		Author authorObjAuthor=new Author(121236,"Rahul12","bihar");
-//		System.out.println( authorObjAuthor.getAuthorid()+" - "+authorObjAuthor.getAuthorname());
-		Author author=authorRepository.save(newAuthor);
+		Author author=authorRepository.save(
+				new Author(newAuthor.getAuthorid(),newAuthor.getAuthorname(),newAuthor.getAuthoraddress()));
 				return new ResponseEntity<>(author,HttpStatus.OK);
 	}
 	
+	
+	public ResponseEntity<?> updateAuthor(Author newAuthor,Long authorId){
+		Author updatedAuthor=authorRepository.findById(authorId)
+				.map(author->{
+					author.setAuthoraddress(newAuthor.getAuthoraddress());
+					author.setAuthorname(newAuthor.getAuthorname());
+					author.setUpdatedOn(newAuthor.getUpdatedOn());
+					return authorRepository.save(author);
+				})
+				.orElseThrow(() -> new ResourceNotFoundException("No Author available with Id -"+authorId));
+		return new ResponseEntity<>(updatedAuthor,HttpStatus.OK);
+	}
+	
+	public ResponseEntity<?> deleteAuthor(Long authorId){
+		authorRepository.findById(authorId)
+		.orElseThrow(() -> new ResourceNotFoundException("No Author available with Id -"+authorId));
+		authorRepository.deleteById(authorId);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		
+	}
+	
+	public ResponseEntity<?> getAuthorById(Long authorId) {
+		Author author=authorRepository.findById(authorId)
+				.orElseThrow(()-> new ResourceNotFoundException("No Author available with Id -"+authorId));
+		return new ResponseEntity<>(author,HttpStatus.OK);
+	}
 }
