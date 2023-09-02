@@ -1,12 +1,14 @@
 package com.bookshelves.serviceImp;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.bookshelves.exception.ErrorMessage;
 import com.bookshelves.exception.ResourceNotFoundException;
 import com.bookshelves.model.Book;
 import com.bookshelves.repository.AuthorRepository;
@@ -37,7 +39,7 @@ public class BookServiceImp {
 			Book book =authorRepository.findById(authorId).map(author ->{
 				newBook.setAuthor(author);
 				return bookRepository.save(newBook); 
-			}).orElseThrow(() -> new ResourceNotFoundException("Not found Author with id = "+ authorId));			
+			}).orElseThrow(() -> new ResourceNotFoundException("Book not found with id = "+ authorId));			
 		
 			return new ResponseEntity<>(book, HttpStatus.CREATED);
 	}
@@ -45,7 +47,7 @@ public class BookServiceImp {
 	
 	public ResponseEntity<Book> updateBook(Long bookId,Book newBook){
 		Book book=bookRepository.findById(bookId)
-		.orElseThrow(()-> new ResourceNotFoundException("Not found Book with id = "+bookId));
+		.orElseThrow(()-> new ResourceNotFoundException("Book not found with id = "+bookId));
 		book.setBookName(newBook.getBookName());
 		book.setBookPrize(newBook.getBookPrize());
 		book.setDescriptio(newBook.getDescriptio());
@@ -56,7 +58,7 @@ public class BookServiceImp {
 	
 	public ResponseEntity<?> deletBook(Long bookId) {
 		 Book book= bookRepository.findById(bookId)
-				 .orElseThrow(()->new ResourceNotFoundException("Not found Book with id = "+ bookId));
+				 .orElseThrow(()->new ResourceNotFoundException("Book not found with id = "+ bookId));
 		bookRepository.deleteById(book.getBookid());
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		
@@ -65,8 +67,10 @@ public class BookServiceImp {
 	
 	public ResponseEntity<?> getBookById(Long bookId){
 		Book book=bookRepository.findById(bookId)
-				.orElseThrow(()->new ResourceNotFoundException("Not found Book with id = "+ bookId));
+				.orElseThrow(()->
+						new ResourceNotFoundException("Book not found with id = "+ bookId)
+						);
 		return new ResponseEntity<>(book,HttpStatus.OK);
-	}
+	}		
 	
 }
